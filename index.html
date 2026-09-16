@@ -6,11 +6,11 @@
     <title>JahitNadi - Nadi Usahawan Jahitan</title>
     <style>
         :root {
-            --primary: #1e3d59;       /* Biru Gelap / Navy */
+            --primary: #1e3d59;
             --primary-hover: #173046;
-            --accent: #ff6e40;        /* Orange Accent */
+            --accent: #ff6e40;
             --accent-hover: #e55b2b;
-            --bg-color: #f5f7fa;      /* Kelabu Soft Modern */
+            --bg-color: #f5f7fa;
             --card-bg: #ffffff;
             --text-dark: #2b2d42;
             --border-color: #e2e8f0;
@@ -29,7 +29,6 @@
             line-height: 1.6;
         }
 
-        /* HEADER & NAVIGATION */
         header {
             background-color: var(--primary);
             color: #fff;
@@ -81,7 +80,6 @@
             padding: 0 20px;
         }
 
-        /* SEKSYEN HALAMAN */
         .page-section {
             display: none;
         }
@@ -90,7 +88,6 @@
             display: block;
         }
 
-        /* HOMEPAGE DESIGN */
         .hero-banner {
             background: linear-gradient(135deg, var(--primary), #2c5282);
             color: white;
@@ -113,8 +110,7 @@
             color: #e2e8f0;
         }
 
-        /* LOGIN FORM ON HOMEPAGE */
-        .login-card {
+        .auth-card {
             background: var(--card-bg);
             max-width: 420px;
             margin: 0 auto 35px auto;
@@ -124,13 +120,30 @@
             border: 1px solid var(--border-color);
         }
 
-        .login-card h3 {
+        .auth-card h3 {
             color: var(--primary);
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.3rem;
             border-bottom: 2px solid var(--accent);
             padding-bottom: 8px;
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .auth-toggle a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
         }
 
         .grid-3 {
@@ -159,7 +172,6 @@
             font-size: 0.92rem;
         }
 
-        /* DASHBOARD TEMPAHAN DESIGN */
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr;
@@ -266,7 +278,6 @@
             background-color: #dc2626;
         }
 
-        /* BADGES STATUS PROSES */
         .status-badge {
             padding: 4px 10px;
             border-radius: 12px;
@@ -288,7 +299,6 @@
             border: 1px solid #c3e6cb;
         }
 
-        /* TABLE DESIGN */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -315,7 +325,6 @@
             background-color: #f8fafc;
         }
 
-        /* FOOTER */
         footer {
             text-align: center;
             padding: 20px;
@@ -332,21 +341,20 @@
 </head>
 <body>
 
-    <!-- HEADER SYSTEM -->
     <header>
         <h1>JahitNadi</h1>
         <p>Nadi Usahawan Jahitan</p>
     </header>
 
-    <!-- NAVIGATION MENU -->
     <nav>
         <button id="btnHome" class="active" onclick="showPage('homePage', 'btnHome')">🏠 Halaman Utama</button>
-        <button id="btnTempahan" onclick="showPage('tempahanPage', 'btnTempahan')">📋 Pengurusan Tempahan</button>
+        <button id="btnTempahan" style="display: none;" onclick="showPage('tempahanPage', 'btnTempahan')">📋 Pengurusan Tempahan</button>
+        <button id="btnLogout" style="display: none; background-color: #ef4444;" onclick="handleLogout()">🚪 Log Keluar</button>
     </nav>
 
     <div class="container">
 
-        <!-- ================= HALAMAN UTAMA (HOMEPAGE) ================= -->
+        <!-- HALAMAN UTAMA (LOG IN / SIGN UP) -->
         <div id="homePage" class="page-section active">
             
             <div class="hero-banner">
@@ -354,23 +362,44 @@
                 <p>Platform digital utama untuk menguruskan tempahan jahitan, rekod pelanggan, dan jadual siap dengan pantas, sistematik, dan efisien.</p>
             </div>
 
-            <!-- BORANG LOG MASUK (LOGIN) -->
-            <div class="login-card">
+            <!-- FORM LOG IN -->
+            <div id="loginBox" class="auth-card">
                 <h3>🔐 Log Masuk Pengguna</h3>
                 <form id="loginForm" onsubmit="handleLogin(event)">
                     <div class="form-group">
-                        <label for="username">Nama Pengguna / ID Usahawan:</label>
-                        <input type="text" id="username" placeholder="Masukkan ID usahawan" required>
+                        <label for="loginUser">Nama Pengguna / ID:</label>
+                        <input type="text" id="loginUser" placeholder="Masukkan ID usahawan" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Kata Laluan:</label>
-                        <input type="password" id="password" placeholder="Masukkan kata laluan" required>
+                        <label for="loginPass">Kata Laluan:</label>
+                        <input type="password" id="loginPass" placeholder="Masukkan kata laluan" required>
                     </div>
                     <button type="submit" class="btn-submit">Log Masuk</button>
                 </form>
+                <div class="auth-toggle">
+                    Belum ada akaun? <a onclick="toggleAuth('signup')">Daftar Akaun (Sign Up)</a>
+                </div>
             </div>
 
-            <!-- CARA GUNA / FUNGSI UTAMA -->
+            <!-- FORM SIGN UP -->
+            <div id="signupBox" class="auth-card" style="display: none;">
+                <h3>📝 Daftar Akaun Baharu</h3>
+                <form id="signupForm" onsubmit="handleSignUp(event)">
+                    <div class="form-group">
+                        <label for="signupUser">Nama Pengguna / ID Baharu:</label>
+                        <input type="text" id="signupUser" placeholder="Cipta nama pengguna" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPass">Kata Laluan:</label>
+                        <input type="password" id="signupPass" placeholder="Cipta kata laluan" required>
+                    </div>
+                    <button type="submit" class="btn-submit" style="background-color: var(--accent);">Daftar Sekarang</button>
+                </form>
+                <div class="auth-toggle">
+                    Sudah ada akaun? <a onclick="toggleAuth('login')">Log Masuk</a>
+                </div>
+            </div>
+
             <div class="grid-3">
                 <div class="info-card">
                     <h3>📝 Rekod Tempahan</h3>
@@ -390,11 +419,10 @@
 
         </div>
 
-        <!-- ================= HALAMAN PENGURUSAN TEMPAHAN ================= -->
+        <!-- HALAMAN PENGURUSAN TEMPAHAN (TERKUNCI KECUALI SELEPAS LOG IN) -->
         <div id="tempahanPage" class="page-section">
             <div class="dashboard-grid">
                 
-                <!-- BORANG TAMBAH TEMPAHAN -->
                 <div class="card">
                     <h2>Borang Tempahan Baru</h2>
                     <form id="orderForm">
@@ -430,7 +458,6 @@
                     </form>
                 </div>
 
-                <!-- CARIAN & SENARAI TEMPAHAN -->
                 <div class="card">
                     <h2>Carian & Senarai Tempahan</h2>
                     
@@ -451,7 +478,6 @@
                                 </tr>
                             </thead>
                             <tbody id="senaraiTempahan">
-                                <!-- Data daripada LocalStorage akan dipaparkan di sini -->
                             </tbody>
                         </table>
                     </div>
@@ -462,17 +488,100 @@
 
     </div>
 
-    <!-- FOOTER -->
     <footer>
         <p>&copy; 2026 JahitNadi - Nadi Usahawan Jahitan.</p>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         let senaraiData = [];
+        let isLoggedIn = false;
 
-        // FUNGSI NAVIGASI TAB (HOME <-> TEMPAHAN)
+        function toggleAuth(mode) {
+            if (mode === 'signup') {
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('signupBox').style.display = 'block';
+            } else {
+                document.getElementById('signupBox').style.display = 'none';
+                document.getElementById('loginBox').style.display = 'block';
+            }
+        }
+
+        function handleSignUp(e) {
+            e.preventDefault();
+            const user = document.getElementById('signupUser').value.trim();
+            const pass = document.getElementById('signupPass').value.trim();
+
+            let users = JSON.parse(localStorage.getItem('jahitnadi_users')) || [];
+
+            if (users.some(u => u.username === user)) {
+                alert('Nama pengguna ini telah wujud. Sila pilih nama lain.');
+                return;
+            }
+
+            users.push({ username: user, password: pass });
+            localStorage.setItem('jahitnadi_users', JSON.stringify(users));
+
+            alert('Pendaftaran akaun berjaya! Sila log masuk.');
+            document.getElementById('signupForm').reset();
+            toggleAuth('login');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            let users = JSON.parse(localStorage.getItem('jahitnadi_users')) || [];
+
+            // Admin default
+            if (users.length === 0) {
+                users.push({ username: 'admin', password: '123' });
+                localStorage.setItem('jahitnadi_users', JSON.stringify(users));
+            }
+
+            const validUser = users.find(u => u.username === user && u.password === pass);
+
+            if (validUser) {
+                isLoggedIn = true;
+                localStorage.setItem('jahitnadi_session', user);
+                alert(`Selamat Datang, ${user}!`);
+                updateUIState();
+                showPage('tempahanPage', 'btnTempahan');
+            } else {
+                alert('Nama pengguna atau kata laluan salah!');
+            }
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            localStorage.removeItem('jahitnadi_session');
+            alert('Anda telah log keluar.');
+            updateUIState();
+            showPage('homePage', 'btnHome');
+        }
+
+        function updateUIState() {
+            const session = localStorage.getItem('jahitnadi_session');
+            if (session) {
+                isLoggedIn = true;
+                document.getElementById('btnTempahan').style.display = 'inline-block';
+                document.getElementById('btnLogout').style.display = 'inline-block';
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('signupBox').style.display = 'none';
+            } else {
+                isLoggedIn = false;
+                document.getElementById('btnTempahan').style.display = 'none';
+                document.getElementById('btnLogout').style.display = 'none';
+                document.getElementById('loginBox').style.display = 'block';
+            }
+        }
+
         function showPage(pageId, btnId) {
+            if (pageId === 'tempahanPage' && !isLoggedIn) {
+                alert('Akses Ditolak! Sila log masuk atau daftar akaun terlebih dahulu.');
+                return;
+            }
+
             document.querySelectorAll('.page-section').forEach(section => {
                 section.classList.remove('active');
             });
@@ -484,16 +593,9 @@
             document.getElementById(btnId).classList.add('active');
         }
 
-        // FUNGSI LOG MASUK (LOGIN)
-        function handleLogin(event) {
-            event.preventDefault();
-            const user = document.getElementById('username').value;
-            alert(`Selamat Datang, ${user}! Log masuk berjaya.`);
-            showPage('tempahanPage', 'btnTempahan');
-        }
-
-        // MUAT TURUN DATA DARI LOCALSTORAGE
         window.onload = function() {
+            updateUIState();
+
             const storedData = localStorage.getItem('jahitnadi_tempahan');
             if (storedData) {
                 senaraiData = JSON.parse(storedData);
@@ -511,10 +613,9 @@
             localStorage.setItem('jahitnadi_tempahan', JSON.stringify(senaraiData));
         }
 
-        // FUNGSI MENYEMAK SAMA ADA TARIKH SIAP SUDAH DILAMPAUI
         function semakStatusProses(tarikhSiapStr) {
             const hariIni = new Date();
-            hariIni.setHours(0, 0, 0, 0); // Tetapkan masa ke permulaan hari
+            hariIni.setHours(0, 0, 0, 0);
 
             const tarikhSiap = new Date(tarikhSiapStr);
             tarikhSiap.setHours(0, 0, 0, 0);
@@ -546,7 +647,6 @@
             });
         }
 
-        // TAMBAH TEMPAHAN BARU
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -566,7 +666,6 @@
             alert('Tempahan berjaya disimpan!');
         });
 
-        // CARIAN (SEARCH ENGINE)
         function searchCustomer() {
             let input = document.getElementById("searchInput");
             let filter = input.value.toLowerCase();
@@ -590,7 +689,6 @@
             }
         }
 
-        // PADAM TEMPAHAN
         function padamTempahan(id) {
             if (confirm("Adakah anda pasti mahu memadam tempahan ini?")) {
                 senaraiData = senaraiData.filter(item => item.id !== id);
